@@ -70,6 +70,44 @@ class UI {
         setTimeout(() => {
             divAlerta.remove();
         }, 2000);
+   };
+
+    /* Método para agregar listado de gastos en Interfaz */
+   agregarGastoListado(gastos){
+
+        //Se manda llamar metodo limpiarHTML
+        this.limpiarHTML();
+
+        //Iterar sobre gastos
+        gastos.forEach(gasto =>{
+            console.log('gasto :>> ', gasto);
+
+            const {cantidadGasto, nombreGasto, id} = gasto;
+
+
+            //Crear un LI
+            const nuevoGasto = document.createElement('LI');
+            nuevoGasto.className = 'list-group-item d-flex justify-content-between align-items-center';
+            nuevoGasto.dataset.id = id; //Agrega el atributo data-id = "id";
+
+            //Se agrega el html del gasto
+            nuevoGasto.innerHTML = `${nombreGasto} <span class="badge badge-primary badge-pill"> ${cantidadGasto} </span>`;
+
+            //Se añade boton para borrar el gasto
+            const btnBorrar = document.createElement('button');
+            btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
+            btnBorrar.innerHTML = 'Borrar &times;'
+            nuevoGasto.appendChild(btnBorrar);
+
+            //Se agrega al html
+            gastoListado.appendChild(nuevoGasto);
+        })
+   };
+    /* Método para limpiar listado de gastos en Interfaz */
+   limpiarHTML(){
+    while (gastoListado.firstChild){
+        gastoListado.removeChild(gastoListado.firstChild);
+    }
    }
 }
 
@@ -148,6 +186,12 @@ function agregarGasto(e){
 
     //Se manda llmar meotodo mostrarAlerta y se le da como parametros un mensaje y un tipo de alerta para mostrar cuando se agrega un gasto correctamente.
     ui.mostrarAlerta('Gasto Agregado Correctamente', 'exito');
+
+
+    //Se manda llamar metodo AgregarGastoListado para agregar el gasto a la interfaz en forma de listado
+
+    const {gastos} = presupuesto;
+    ui.agregarGastoListado(gastos);
 
     //Reinicia formulario cada que se añade un gasto
     formulario.reset();
