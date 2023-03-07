@@ -8,6 +8,9 @@ eventListeners ();
 
 function eventListeners (){
     document.addEventListener('DOMContentLoaded', preguntarPresupuesto );
+
+    /* Escuchar los eventos en el formulario */
+    formulario.addEventListener('submit', agregarGasto );
 }
 
 /* Clases */
@@ -31,6 +34,35 @@ class UI {
         //Se selecciona el elemento HTML para insertar presupuesto y restante en el DOM
         document.querySelector('#total').textContent = presupuesto;
         document.querySelector('#restante').textContent = restante;
+   }
+
+   /* Método para mostrar Alerta en Interfaz */
+
+   mostrarAlerta(mensaje, tipo){
+
+        //Crear div para mostrar alerta
+        const divAlerta = document.createElement('div');
+        
+        divAlerta.classList.add('text-center', 'alert');
+
+            //Se valida el tipo de alerta para agregar una clase que mostrara estilos difetentes en el div
+
+            if(tipo === 'error'){
+               divAlerta.classList.add('alert-danger');
+            }else{
+                divAlerta.classList.add('alert-success');
+            }
+        
+        //Se añade mensaje a divAlerta
+        divAlerta.textContent = mensaje;
+
+        //Se inserta divAlerta a HTML
+        document.querySelector('.primario').insertBefore(divAlerta, formulario);
+
+        //Quitar Mensaje Alerta despues de 2s
+        setTimeout(() => {
+            divAlerta.remove();
+        }, 2000);
    }
 }
 
@@ -66,4 +98,35 @@ function preguntarPresupuesto(){
 
     /* Se llama metodo isnertarPresupuesto, asignandole el objeto presupuesto */
     ui.insertarPresupuesto(presupuesto);
+};
+
+
+//Agregar /añade gastos
+
+function agregarGasto(e){
+    e.preventDefault();
+
+    //Leer los inputs del formulario
+
+    const nombreGasto = document.querySelector('#gasto').value;
+    const cantidadGasto = document.querySelector('#cantidad').value;
+
+    /* Validación formulario: 
+
+        1.- Inputs no esten vacios ---> nombreGasto === '' || cantidadGasto === ''
+        2.- Validar que la cantidad del gasto sea > 0 y/o que sea un numero;
+    */
+
+        if(nombreGasto === '' || cantidadGasto === ''){
+
+            //Se manda llmar meotodo mostrarAlerta y se le da como parametros un mensaje y un tipo de alerta.
+            ui.mostrarAlerta('Ambos campos son obligatorios', 'error');
+            return;
+        }else if (cantidadGasto <= 0 || isNaN(cantidadGasto)){
+            //Se manda llmar meotodo mostrarAlerta y se le da como parametros un mensaje y un tipo de alerta.
+            ui.mostrarAlerta('Cantidad no válida', 'error');
+            return;
+        }
+
+        console.log('agregando gasto :>> ');
 }
