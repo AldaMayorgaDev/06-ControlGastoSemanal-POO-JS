@@ -21,7 +21,17 @@ class Presupuesto {
 }
 
 class UI {
-   
+   /* Metodo para insertar Presupuesto en HTML */
+   insertarPresupuesto(cantidad){
+        console.log('cantidad :>> ', cantidad);
+
+        //Se destructura el objeto presupuesto que llega como cantidad
+        const {presupuesto, restante} = cantidad;
+
+        //Se selecciona el elemento HTML para insertar presupuesto y restante en el DOM
+        document.querySelector('#total').textContent = presupuesto;
+        document.querySelector('#restante').textContent = restante;
+   }
 }
 
 /* Instanciar  UI */
@@ -52,4 +62,8 @@ function preguntarPresupuesto(){
     /* Presupuesto valido se instancia la clase Presupuesto */
     presupuesto = new Presupuesto(presupuestoUsuario);
     console.log('Objetopresupuesto :>> ', presupuesto);
+
+
+    /* Se llama metodo isnertarPresupuesto, asignandole el objeto presupuesto */
+    ui.insertarPresupuesto(presupuesto);
 }
