@@ -2,7 +2,7 @@
 
 const formulario = document.querySelector('#agregar-gasto');
 const gastoListado = document.querySelector('#gastos ul');
-
+let presupuesto;
 /* Eventos */
 eventListeners ();
 
@@ -11,6 +11,23 @@ function eventListeners (){
 }
 
 /* Clases */
+
+class Presupuesto {
+    constructor (presupuesto){
+        this.presupuesto = presupuesto;
+        this.restante = presupuesto;
+        this.gastos=  []; 
+    }
+}
+
+class UI {
+   
+}
+
+/* Instanciar  UI */
+const ui = new UI();
+
+
 
 /* Funciones */
 
@@ -31,4 +48,8 @@ function preguntarPresupuesto(){
     if(presupuestoUsuario === '' || presupuestoUsuario === null || isNaN(presupuestoUsuario) || presupuestoUsuario <= 0){
         window.location.reload(); //Recarga la pagina y vuelve a enviar el prompt
     }
+
+    /* Presupuesto valido se instancia la clase Presupuesto */
+    presupuesto = new Presupuesto(presupuestoUsuario);
+    console.log('Objetopresupuesto :>> ', presupuesto);
 }
