@@ -21,6 +21,13 @@ class Presupuesto {
         this.restante = presupuesto;
         this.gastos=  []; 
     }
+
+    /* Método para nuevo gasto */
+
+    nuevoGasto(gasto){
+        this.gastos=  [...this.gastos, gasto]; 
+        console.log('this.gastos', this.gastos)
+    }
 }
 
 class UI {
@@ -109,7 +116,7 @@ function agregarGasto(e){
     //Leer los inputs del formulario
 
     const nombreGasto = document.querySelector('#gasto').value;
-    const cantidadGasto = document.querySelector('#cantidad').value;
+    const cantidadGasto = Number(document.querySelector('#cantidad').value);
 
     /* Validación formulario: 
 
@@ -128,5 +135,20 @@ function agregarGasto(e){
             return;
         }
 
-        console.log('agregando gasto :>> ');
+    //Generar un objeto con el gasto
+
+    const gasto = {
+        nombreGasto, 
+        cantidadGasto, 
+        id: Date.now()
+    };
+
+    /* Añade nuevogasto */
+    presupuesto.nuevoGasto(gasto);
+
+    //Se manda llmar meotodo mostrarAlerta y se le da como parametros un mensaje y un tipo de alerta para mostrar cuando se agrega un gasto correctamente.
+    ui.mostrarAlerta('Gasto Agregado Correctamente', 'exito');
+
+    //Reinicia formulario cada que se añade un gasto
+    formulario.reset();
 }
