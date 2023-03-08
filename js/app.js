@@ -36,6 +36,15 @@ class Presupuesto {
         this.restante = this.presupuesto - gastado;
     }
 
+     /* Método para  eliminar gasto y rembolzarlo  */
+     eliminarGasto(id){
+        this.gastos = this.gastos.filter(gasto => gasto.id !== id);
+        this.calcularRestante();
+
+        console.log('this.gastos :>> ', this.gastos);
+    }
+
+
 }
 
 class UI {
@@ -104,7 +113,10 @@ class UI {
             //Se añade boton para borrar el gasto
             const btnBorrar = document.createElement('button');
             btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
-            btnBorrar.innerHTML = 'Borrar &times;'
+            btnBorrar.innerHTML = 'Borrar &times;';
+            btnBorrar.onclick = ()=>{
+                eliminarGasto(id);
+            }
             nuevoGasto.appendChild(btnBorrar);
 
             //Se agrega al html
@@ -134,10 +146,12 @@ class UI {
         }else if((presupuesto / 2) > restante){//comprobar 50% de gasto
             restanteDiv.classList.remove('alert-success');
             restanteDiv.classList.add('alert-warning');
+        }else{//Rembolsp
+            restanteDiv.classList.remove('alert-danger','alert-warning');
+            restanteDiv.classList.add('alert-success');
         }
 
-
-        //Si el otata es 0 o menor
+        //Si el total es 0 o menor
         if(restante<=0){
             ui.mostrarAlerta('El presupuesto se ha agotado', 'error');
 
@@ -238,3 +252,21 @@ function agregarGasto(e){
     //Reinicia formulario cada que se añade un gasto
     formulario.reset();
 }
+
+
+    //Eliminar Gasto
+function eliminarGasto(id){
+    //Elimina gastos del objeto
+    presupuesto.eliminarGasto(id);
+
+
+    //Elimina gastos de la interfaz
+    const {gastos, restante} = presupuesto
+    ui.agregarGastoListado(gastos);
+
+
+    ui.actualizarRestante (restante);
+
+    //Se manda llamar metodo ComprobarPresupuesto para validarlo
+    ui.comprobarPresupuesto (presupuesto);
+}    
