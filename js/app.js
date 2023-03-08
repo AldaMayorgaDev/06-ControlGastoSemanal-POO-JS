@@ -26,8 +26,16 @@ class Presupuesto {
 
     nuevoGasto(gasto){
         this.gastos=  [...this.gastos, gasto]; 
-        console.log('this.gastos', this.gastos)
+        console.log('this.gastos', this.gastos);
+        this.calcularRestante();
     }
+    
+    /* Método para  calcular restante */
+    calcularRestante(){
+        const gastado = this.gastos.reduce((total, gasto)=> total + gasto.cantidadGasto, 0);
+        this.restante = this.presupuesto - gastado;
+    }
+
 }
 
 class UI {
@@ -91,7 +99,7 @@ class UI {
             nuevoGasto.dataset.id = id; //Agrega el atributo data-id = "id";
 
             //Se agrega el html del gasto
-            nuevoGasto.innerHTML = `${nombreGasto} <span class="badge badge-primary badge-pill"> ${cantidadGasto} </span>`;
+            nuevoGasto.innerHTML = `${nombreGasto} <span class="badge badge-primary badge-pill"> $${cantidadGasto} </span>`;
 
             //Se añade boton para borrar el gasto
             const btnBorrar = document.createElement('button');
@@ -108,6 +116,11 @@ class UI {
     while (gastoListado.firstChild){
         gastoListado.removeChild(gastoListado.firstChild);
     }
+   };
+
+    /* Método para lactualizar la cantidad restante en Interfaz */
+   actualizarRestante(restante){
+    document.querySelector('#restante').textContent = restante;
    }
 }
 
@@ -190,8 +203,9 @@ function agregarGasto(e){
 
     //Se manda llamar metodo AgregarGastoListado para agregar el gasto a la interfaz en forma de listado
 
-    const {gastos} = presupuesto;
+    const {gastos, restante} = presupuesto;
     ui.agregarGastoListado(gastos);
+    ui.actualizarRestante (restante);
 
     //Reinicia formulario cada que se añade un gasto
     formulario.reset();
